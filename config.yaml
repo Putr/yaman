@@ -1,0 +1,30 @@
+version: 1
+variables:
+  path: /var/www/projects/work/totalAssesment/dashboard 
+pre:
+  - cd /var/www/projects/work/totalAssesment/dashboard
+  - sudo webserverStopLocal
+  - sleep 0.5
+  - docker-compose start
+  - sleep 1
+tabs:
+  dev:
+    - "jump ta"
+    - "git status"
+  htop:
+    - "htop"
+  www:
+    - "jump www"
+  split:
+    left:
+      top:
+        - "jump ta"
+      bottom: 
+        - "jump www"
+    right:
+      - "ps faux"
+  server:
+    - ssh server.server
+down:
+  - cd %path%
+  - docker-compose stop
