@@ -1,46 +1,64 @@
 import subprocess
-from pprint import pprint
+
+"""Yakuake interface
+
+Used as a template interface - if you wish to implement an interface
+for your own terminal you must implement all the REQUIRED functions.
+"""
+
 
 def createSession(title):
+	"""REQUIRED: Creates a new TAB/session
+	
+	Arguments:
+		title {string} -- The label of the tabs
+	
+	Returns:
+		tuple -- The terminal ID identifiying this specific terminal and 
+				 the session ID (used for session removal on profile change)!
+	"""
 	newSessionId = instruct(['/yakuake/sessions', 'org.kde.yakuake.addSession'])
 	setSessionTitle(newSessionId, title)
-
-	return getTerminalListForSession(newSessionId)[0]
+	return getTerminalListForSession(newSessionId)[0], newSessionId
 
 def removeSessions(sessionId):
+	"""REQUIRED: Removes TAB/session
+	
+	Arguments:
+		sessionId {integer} -- ID of tab/session, not terminal
+	"""
 	instruct(['/yakuake/sessions', 'removeSession', sessionId])
 
-def sendCommand(sessionId, command):
-	instruct(['/yakuake/sessions', 'runCommandInTerminal', str(sessionId), command])
+def sendCommand(termId, command):
+	"""REQUIRED: Sends a command to a terminal
+	
+	Arguments:
+		termId {integer} -- ID of terminal to run the command, not TAB!
+		command {string}
+	"""
+	instruct(['/yakuake/sessions', 'runCommandInTerminal', str(termId), command])
 
 def setSessionTitle(sessionId, title):
 	instruct(['/yakuake/tabs', 'org.kde.yakuake.setTabTitle', sessionId, title])
 
 def startEmulatorIfNotStarted():
+	"""REQUIRED: Starts the terminal emulator
+	"""
 	instruct(['/yakuake/sessions', 'org.freedesktop.DBus.Peer.Ping'])
 
 #
 # Splitting
 #
 
-def splitSessionVertically(sessionId):
-	id = instruct([
-			'/yakuake/sessions', 
-			'org.kde.yakuake.splitSessionLeftRight', 
-			str(sessionId)
-		])
-	return int(id) # ID of new terminal
-
-
-def splitSessionHorizontally(sessionId):
-	id = instruct([
-			'/yakuake/sessions', 
-			'org.kde.yakuake.splitSessionTopBottom', 
-			str(sessionId)
-		])
-	return int(id) # ID of new terinal
-
 def splitTerminalVertically(terminalId):
+	"""REQUIRED: Splits a TERMINAL (not tab) vertically
+	
+	Arguments:
+		terminalId {integer}
+	
+	Returns:
+		integer -- ID of new terminal
+	"""
 	id = instruct([
 			'/yakuake/sessions', 
 			'org.kde.yakuake.splitTerminalLeftRight', 
@@ -50,6 +68,14 @@ def splitTerminalVertically(terminalId):
 
 
 def splitTerminalHorizontally(terminalId):
+	"""REQUIRED: Splits a TERMINAL (not tab) horizontally
+	
+	Arguments:
+		terminalId {integer}
+	
+	Returns:
+		integer -- ID of new terminal
+	"""
 	id = instruct([
 			'/yakuake/sessions', 
 			'org.kde.yakuake.splitTerminalTopBottom', 
@@ -62,40 +88,40 @@ def splitTerminalHorizontally(terminalId):
 #
 
 def growTerminalBottom(terminalId, pixels):
+	"""REQUIRED: Grow terminal"""
 	id = instruct([
 			'/yakuake/sessions', 
 			'org.kde.yakuake.tryGrowTerminalBottom', 
 			str(terminalId),
 			str(pixels)
 		])
-	return int(id) # Reports how much it actually grew
 
 def growTerminalTop(terminalId, pixels):
+	"""REQUIRED: Grow terminal"""
 	id = instruct([
 			'/yakuake/sessions', 
 			'org.kde.yakuake.tryGrowTerminalTop', 
 			str(terminalId),
 			str(pixels)
 		])
-	return int(id) # Reports how much it actually grew
 
 def growTerminalLeft(terminalId, pixels):
+	"""REQUIRED: Grow terminal"""
 	id = instruct([
 			'/yakuake/sessions', 
 			'org.kde.yakuake.tryGrowTerminalLeft', 
 			str(terminalId),
 			str(pixels)
 		])
-	return int(id) # Reports how much it actually grew
 
 def growTerminalRight(terminalId, pixels):
+	"""REQUIRED: Grow terminal"""
 	id = instruct([
 			'/yakuake/sessions', 
 			'org.kde.yakuake.tryGrowTerminalRight', 
 			str(terminalId),
 			str(pixels)
 		])
-	return int(id) # Reports how much it actually grew
 
 #
 # Getters
@@ -117,10 +143,6 @@ def getTerminalListForSession(sessionId):
 #
 
 def instruct(cmd):
-	# pprint("RUNNING INSTRUCT")
 	cmd = ['qdbus', 'org.kde.yakuake'] + cmd
-	# pprint(cmd)
 	data = subprocess.check_output(cmd)
-	# pprint("Got command results");
-	# pprint(data)
 	return str(data, 'utf-8').strip()
