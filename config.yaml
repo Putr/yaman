@@ -2,14 +2,13 @@ version: 1
 variables:
   path: /var/www/projects/work/totalAssesment/dashboard 
 pre:
-  - cd /var/www/projects/work/totalAssesment/dashboard
-  - sudo webserverStopLocal
-  - sleep 0.5
-  - docker-compose start
-  - sleep 1
+  - cd %path%
+  - sleep 3
+  - echo PATH
+
 tabs:
   dev:
-    - "jump ta"
+    - "cd %path%"
     - "git status"
   htop:
     - "htop"
