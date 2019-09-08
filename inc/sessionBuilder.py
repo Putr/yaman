@@ -8,7 +8,7 @@ class SessionBuilder:
 	replacementVariables = {}
 	sessions = {}
 
-	def buildFromConfig(self, configData):
+	def __init__(self, configData):
 		if 'terminal' in configData:
 			if configData['terminal'] == 'yakuake':
 				from inc.interface import yakuake  as terminalInterface
@@ -20,6 +20,8 @@ class SessionBuilder:
 			raise Exception('Terminal type not set in configuration!')
 
 		self.terminalInterface = terminalInterface
+
+	def buildFromConfig(self, configData):
 
 		if configData['variables']:
 			self.replacementVariables = configData['variables'] 
@@ -36,6 +38,17 @@ class SessionBuilder:
 				splitTermId = self.handleSplit(termId, tabConfig)
 			else:
 				self.runCommands(termId, tabConfig)
+
+		return self.sessions
+
+	def runPreCloseCommands(self, configData):
+		if configData['variables']:
+			self.replacementVariables = configData['variables']
+
+		if configData['down']:
+			for preCommand in configData['down']:
+				cmd = self.handleReplacementVariables(preCommand)
+				os.system(cmd)
 
 	def handleReplacementVariables(self, string):
 		for varName, varValue in self.replacementVariables.items():
@@ -66,3 +79,6 @@ class SessionBuilder:
 	def runCommands(self, termId, commandList):
 		for command in commandList:
 				self.terminalInterface.sendCommand(termId, self.handleReplacementVariables(command))
+
+	def removeSession(self, sessionId):
+		self.terminalInterface.removeSession(sessionId)

@@ -21,7 +21,7 @@ def createSession(title):
 	setSessionTitle(newSessionId, title)
 	return getTerminalListForSession(newSessionId)[0], newSessionId
 
-def removeSessions(sessionId):
+def removeSession(sessionId):
 	"""REQUIRED: Removes TAB/session
 	
 	Arguments:

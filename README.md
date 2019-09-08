@@ -1,18 +1,12 @@
 Start
 
-    virtualenv venv
+    $ virtualenv venv
+    . venv/bin/activate
+    pip install --editable .
 
 Stop
 
     deactivate
-
-Freezing current config
-
-    pip freeze > requirements.txt
-
-Installing frozen requirements
-
-    pip install -r requirements.txt
 
 
 https://wiki.archlinux.org/index.php/Yakuake#dbus-send_instead_of_qdbus

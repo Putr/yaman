@@ -1,0 +1,33 @@
+version: 1
+# Supported: yakuake or guake
+terminal: yakuake
+
+# Used as replecements in tabs, pre and down. path => %path%
+variables:
+  path: /your/path 
+
+# Run before the tabs are setup
+pre:
+  - cd %path%
+
+tabs:
+  yourTabName: # Any name you want
+    - "cd %path%"
+    - "git status"
+  htop:
+    - "htop"
+  splitTab:
+    left:
+      top:
+        - "ls -la"
+      bottom: 
+        - "ll"
+    right:
+      - "ps faux"
+  server:
+    - ssh server
+
+# Run when you close this session
+down:
+  - cd %path%
+  - docker-compose stop

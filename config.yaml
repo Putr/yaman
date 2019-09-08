@@ -27,4 +27,4 @@ tabs:
     - ssh server.server
 down:
   - cd %path%
-  - docker-compose stop
+  - echo PRECLOSE
