@@ -91,10 +91,18 @@ def create(template, profile_name):
 
 @cli.command()
 @click.argument('profile_name')
-def edit( profile_name):
+def edit(profile_name):
 	"""Opens the profiles configuration file in the default editor"""
 	configFile = manager.getConfigPath() + '/' + profile_name + '.yaml'
 	click.edit(filename=configFile)
+
+@cli.command()
+@click.option('--path', default=DEFAULT_CONFIG_PATH, help='If not specified default system path will be used.')
+def list(path):
+	"""List all profiles"""
+	profiles = manager.getSessionFiles(path)
+	for profile in profiles:
+		click.echo(profile)
 
 @cli.command()
 def show_path():
@@ -107,6 +115,7 @@ cli.add_command(close)
 cli.add_command(switch)
 cli.add_command(create)
 cli.add_command(edit)
+cli.add_command(list)
 cli.add_command(show_path)
 
 

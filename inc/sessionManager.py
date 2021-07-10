@@ -23,6 +23,11 @@ class SessionManager:
 		if not os.path.exists(profile_path):
 			os.makedirs(profile_path)
 
+	def getSessionFiles(self, path):
+		files = os.listdir(path)
+		return [file.replace('.yaml', '') for file in files]
+
+
 	def getSessionFile(self, readOnly=False):
 		sessionFile = self.getSessionFilepath()
 		
