@@ -1,11 +1,20 @@
-# Tman - Terminal manager
+# yaman - Yakuake terminal manager
 
-Terminal manager used to control tabbed tiled terminals with current support for Yakuake and Guake.
+Manager for [Yakuake](https://apps.kde.org/sl/yakuake/), a drop-down, tabbed & tiled terminal emulator.
 
-## Terminal support
+## What?
 
-* Yakuake
-* Gauke (planned)
+You know how working on a project you often need, besides an open IDE and browser, a number of separate terminals (npm, git, docker environment, ... ). You also need to run some scripts before you start and after you finish (e.g. docker containers). It's a hassle, right? Everything just becomes a nightmare when working on multiple projects.
+
+Well, no more. Now you can setup your project environment with a single command.
+
+### What isn't covered?
+
+The only thing I have not figured out how is to automate [Tab Session Manager](https://addons.mozilla.org/en-US/firefox/addon/tab-session-manager/) - i.e. the browser tabs.
+
+Everything else - docker, vscode, yakuake can be handled by this tool.
+
+PS: This is obviously a solution for a very specific set of tools. It's not meant to be a general purpose tool.
 
 ## Features
 
@@ -13,21 +22,13 @@ Terminal manager used to control tabbed tiled terminals with current support for
 * Open, close and switch profiles
 * Tabs can define custom tiling per tab
 * Each created terminal can run any predefined set of commands
-* Run predefined commands when opening and when closing a profile
-* Support multiple terminals with the same config (planned)
-* Modify size of tiled terminals (planned)
-
-## Why?
-
-Do you find yourself constantly opening the same tabs, runing the same commands all just to setup your "optimal" work enviroment? Do you hate the fact that these tabbed terminals are missing session saving? Do you hate changing your terminal setup when switching between projects?
-Well, so do I.
+* Run predefined commands when opening and when closing a profile (i.e. start/stop dockers)
 
 ## How does it work?
 
 You define a profile config file where you define the tabs, how they are split and what commands should be run (cd-ing into folders, tailing logs, starting file watchers, sshing into a server etc.) that looks like this:
 
     version: 1
-    terminal: yakuake
     variables:
       path: /your/path 
     pre:
@@ -55,32 +56,45 @@ You define a profile config file where you define the tabs, how they are split a
 
 ## How do I use it?
 
-**Create a new profile**
+### Create a new profile
+
 This creates a config file and opens it in your default editor.
 
-    tman create <profileName>
+    yaman create <profileName>
 
-**Start a profile**
+### List all profiles
 
-    tman start <profileName>
+    yaman list
 
-**Stop profile**
+### Open a profile
 
-    tman close <profileName>
+    yaman open <profileName>
 
-**Switch profile**
+### Stop a profile
+
+    yaman close <profileName>
+
+### Switch profile
+
 This will close the open profile(s) and open the specified one.
 
-    tman switch <profileName>
+    yaman switch <profileName>
 
-**Edit profile**
+### Edit profile
 
-    tman edit <profileName>
+    yaman edit <profileName>
 
 ## How to install
 
-    git clone <path>
-    virtualenv venv
-    . venv/bin/activate
-    pip install --editable .
+### Required
 
+You'll need `qdbus` found in the following packages:
+
+* Arch: qt5-tools
+* Debian/Ubuntu: qttools5-dev-tools (not tested!)
+
+### Development
+
+    git clone <path>
+    poetry install
+    poetry run yaman

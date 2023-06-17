@@ -1,6 +1,4 @@
 version: 1
-# Supported: yakuake or guake
-terminal: yakuake
 
 # Used as replecements in tabs, pre and down. path => %path%
 variables:

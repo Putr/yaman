@@ -17,7 +17,8 @@ class SessionBuilder:
 			else:
 				raise NotImplementedError('This terminal is not yet supported!')
 		else:
-			raise Exception('Terminal type not set in configuration!')
+			configData['terminal'] = 'yakuake'
+			from inc.interface import yakuake as terminalInterface
 
 		self.terminalInterface = terminalInterface
 

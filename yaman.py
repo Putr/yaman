@@ -1,5 +1,5 @@
 #!/user/bin/env python3
-"""Tman - Terminal Manager"""
+"""yaman - Terminal Manager"""
 
 import os
 import click
@@ -10,7 +10,7 @@ from inc.sessionManager import SessionManager
 from pprint import pprint
 import sys
 
-APP_NAME = 'tman'
+APP_NAME = 'yaman'
 
 manager = SessionManager(click.get_app_dir(APP_NAME))
 
@@ -18,12 +18,13 @@ DEFAULT_CONFIG_PATH = manager.getConfigPath()
 
 @click.group()
 def cli():
+	"""yaman cli"""
 	pass
 
 @cli.command()
 @click.option('--path', default=DEFAULT_CONFIG_PATH, help='If not specified default system path will be used.')
 @click.argument('profile_name')
-def start(path, profile_name):
+def open(path, profile_name):
 	"""Executes a profile configuration file and creates terminals, runs scripts"""
 	configData = loadConfigOrError(path, profile_name)
 	builder = SessionBuilder(configData)
@@ -110,7 +111,7 @@ def show_path():
 	path = click.get_app_dir(APP_NAME)
 	click.echo(click.format_filename(path))
 
-cli.add_command(start)
+cli.add_command(open)
 cli.add_command(close)
 cli.add_command(switch)
 cli.add_command(create)
